@@ -18,6 +18,7 @@ import org.json.simple.JSONObject;
 
 import taxiservice.payments.dto.PaymentsHistory;
 import taxiservice.payments.exceptions.NonExistingClientException;
+import taxiservice.payments.models.ChargeAmount;
 import taxiservice.payments.models.Payment;
 import taxiservice.payments.services.PaymentService;
 
@@ -58,11 +59,11 @@ public class PaymentsImpl implements IPayments {
 	@Path("/addCredit")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addCredit(long clientId, double amount) {
+	public Response addCredit(ChargeAmount chargeAmount) {
 		double currentAmount;
 		JSONObject responseDetailsJson = new JSONObject();
 		try {
-			 currentAmount = paymentService.addCreditForClient(clientId,amount);
+			 currentAmount = paymentService.addCreditForClient(chargeAmount);
 		} catch (NonExistingClientException e) {
 			responseDetailsJson.put("error", e.getMessage());
 			return Response.status(404).entity(responseDetailsJson.toString()).build();

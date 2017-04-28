@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import taxiservice.payments.dto.PaymentsHistory;
 import taxiservice.payments.dto.Wallet;
 import taxiservice.payments.exceptions.NonExistingClientException;
+import taxiservice.payments.models.ChargeAmount;
 import taxiservice.payments.utils.HibernateUtil;
 
 public class PaymentService {
@@ -42,14 +43,14 @@ public class PaymentService {
 		}
 		
 	}
-	public double addCreditForClient(long clientId, double amount) throws NonExistingClientException {
-		Wallet clientWallet = getClientWallet(clientId);
-		double currentAmount = clientWallet.getAmount() + amount;
+	public double addCreditForClient(ChargeAmount chargeAmount) throws NonExistingClientException {
+		Wallet clientWallet = getClientWallet(chargeAmount.getClientId());
+		double currentAmount = clientWallet.getAmount() + chargeAmount.getAmount();
 		openSession();
-		addPaymentHistory(clientWallet.getWalletid(),amount,"EUR","TEST");
+		addPaymentHistory(clientWallet.getWalletid(),chargeAmount.getAmount(),chargeAmount.getCurrency(),chargeAmount.getPayment_type());
 		Query query = session.createQuery("update Wallet set amount = :updateAmount" + " where clientId = :clientId");
 		query.setParameter("updateAmount", currentAmount);
-		query.setParameter("clientId", clientId);
+		query.setParameter("clientId", chargeAmount.getClientId());
 		query.executeUpdate();
 		closeSession();
 		return currentAmount;
