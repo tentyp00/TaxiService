@@ -6,27 +6,25 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 public class HibernateUtil {
-	private static SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
 
-	static {
-		 try {
-				Configuration configuration = new Configuration().configure();
-				ServiceRegistry serviceRegistry  = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-				
-				 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-			  
+    static {
+        try {
+            Configuration configuration = new Configuration().configure();
+            ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 
-			  } catch (Throwable t) {
-			    
-			    throw t;
-			  }
-	
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-	       
-		
-	}
 
-	public static SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
+        } catch (Throwable t) {
+
+            throw t;
+        }
+
+
+    }
+
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 }
