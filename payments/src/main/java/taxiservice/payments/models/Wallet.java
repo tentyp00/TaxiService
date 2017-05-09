@@ -6,25 +6,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Wallets", schema = "taxiservice")
+@Table(name = "wallets", schema = "taxiservice")
 public class Wallet {
 
-    private long walletid;
+    private long id;
     private double amount;
     private String currency;
     private boolean isActive;
     private List<PaymentsHistory> paymentsHistoryList = new ArrayList<>();
 
-
-    @Id
-    @GeneratedValue
-    @Column(name = "walletid")
-    public long getWalletid() {
-        return walletid;
+    public Wallet() {
     }
 
-    public void setWalletid(long walletid) {
-        this.walletid = walletid;
+    public Wallet(double amount, String currency, boolean isActive) {
+        this.amount = amount;
+        this.currency = currency;
+        this.isActive = isActive;
+    }
+
+    @Id
+    @Column(name = "wallet_id")
+    @SequenceGenerator(name="taxiservice.wallets_walletid_seq", sequenceName="taxiservice.wallets_walletid_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxiservice.wallets_walletid_seq")
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Column(name = "is_active")
@@ -54,7 +63,7 @@ public class Wallet {
         this.currency = currency;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "payments_history")
+    @OneToMany(fetch = FetchType.LAZY)
     public List<PaymentsHistory> getPaymentsHistoryList() {
         return paymentsHistoryList;
     }

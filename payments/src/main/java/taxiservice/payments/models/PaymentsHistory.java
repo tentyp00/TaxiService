@@ -7,22 +7,26 @@ import java.sql.Timestamp;
 @Table(name = "payments_history", schema = "taxiservice")
 public class PaymentsHistory {
 
-   private long paymentid;
+   private long id;
    private Wallet wallet;
    private Timestamp payment_time;
    private double amount;
    private String currency;
    private String payment_type;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "paymentid")
-    public long getPaymentId() {
-        return paymentid;
+    public PaymentsHistory() {
     }
 
-    public void setPaymentId(long paymentid) {
-        this.paymentid = paymentid;
+    @Id
+    @Column(name = "payment_id")
+    @SequenceGenerator(name="taxiservice.payments_history_paymentid_seq", sequenceName="taxiservice.payments_history_paymentid_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxiservice.payments_history_paymentid_seq")
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
