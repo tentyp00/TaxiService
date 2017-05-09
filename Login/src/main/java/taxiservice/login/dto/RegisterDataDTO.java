@@ -16,6 +16,9 @@ public class RegisterDataDTO {
     private Timestamp join_date;
     private String phone_number;
 
+    public RegisterDataDTO() {
+    }
+
     public RegisterDataDTO(long userid, String first_name, String last_name, String email, String login, String password,
                            Timestamp join_date, String phone_number) {
         this.userid = userid;

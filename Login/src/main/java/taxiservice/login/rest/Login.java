@@ -43,7 +43,7 @@ public class Login {
 				return Response.status(500).entity(response).build();
 			}
 			if (passOk) {
-				jsonUser.put("userid", user.getUserid());
+				jsonUser.put("userid", user.getId());
 				jsonUser.put("first_name", user.getFirstName());
 				jsonUser.put("last_name", user.getLastName());
 				jsonUser.put("email", user.getEmail());

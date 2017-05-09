@@ -1,9 +1,6 @@
 package taxiservice.login.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -14,7 +11,7 @@ import java.sql.Timestamp;
 @Table(name = "system_users", schema = "taxiservice")
 public class SystemUser {
 
-    private long userid;
+    private long id;
     private String first_name;
     private String last_name;
     private String email;
@@ -23,22 +20,29 @@ public class SystemUser {
     private Timestamp join_date;
     private String phone_number;
 
-    public SystemUser(String first_name, String last_name, String email, String login, String password, String phone_number) {
+    public SystemUser() {
+    }
+
+    public SystemUser(String first_name, String last_name, String email, String login, String password, Timestamp join_date, String phone_number) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
         this.login = login;
         this.password = password;
+        this.join_date = join_date;
         this.phone_number = phone_number;
     }
 
     @Id
-    public long getUserid() {
-        return userid;
+    @Column(name = "user_id")
+    @SequenceGenerator(name="taxiservice.system_users_userid_seq", sequenceName="taxiservice.system_users_userid_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxiservice.system_users_userid_seq")
+    public long getId() {
+        return id;
     }
 
-    public void setUserid(long userid) {
-        this.userid = userid;
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Column(name = "first_name")

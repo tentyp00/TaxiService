@@ -15,7 +15,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Path("/register")
 public class Register {
@@ -28,20 +27,18 @@ public class Register {
 			String computed_hash = Password.hashPassword(registerDataDTO.getPassword());
 
 			SystemUser user = new SystemUser(registerDataDTO.getFirst_name(), registerDataDTO.getLast_name(),
-					registerDataDTO.getEmail(), registerDataDTO.getLogin(),computed_hash, registerDataDTO.getPhone_number());
+					registerDataDTO.getEmail(), registerDataDTO.getLogin(),computed_hash, registerDataDTO.getJoin_date(), registerDataDTO.getPhone_number());
 
 			Wallet clientWallet  = new Wallet( 0.0, "PLN", true);
 
 			Client client = new Client(user, true, clientWallet);
+
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
-			List<Client> users = (List<Client>) session.createQuery("from Client ").list();
-
-			//TODO: co to za ficzer?
-			//newUser.setUser_id(users.size()+1);
 			session.save(client);
 			session.getTransaction().commit();
 			session.close();
+
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("isSuccess", true);
 			String response = "{ isSuccess: true }";
@@ -51,7 +48,8 @@ public class Register {
 		} catch (Exception  e) {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("isSuccess", false);
-			String response = "{ isSuccess: false }";
+			String response = "{ isSuccess: false }" + e;
+			e.printStackTrace();
 			
 			return Response.status(500).entity(response).build();
 		
