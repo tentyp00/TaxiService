@@ -1,9 +1,9 @@
 package taxiservice.payments;
 
-import javax.ws.rs.core.Response;
+import taxiservice.payments.dto.ChargeAmount;
+import taxiservice.payments.dto.Payment;
 
-import taxiservice.payments.models.ChargeAmount;
-import taxiservice.payments.models.Payment;
+import javax.ws.rs.core.Response;
 
 public interface IPayments {
 

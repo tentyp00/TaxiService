@@ -1,4 +1,4 @@
-package taxiservice.payments.models;
+package taxiservice.payments.dto;
 
 public class Payment {
     long clientId;

@@ -1,4 +1,4 @@
-package taxiservice.payments.dto;
+package taxiservice.payments.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -2,10 +2,11 @@ package taxiservice.payments.services;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import taxiservice.payments.dto.PaymentsHistory;
-import taxiservice.payments.dto.Wallet;
+import taxiservice.payments.dto.ChargeAmount;
 import taxiservice.payments.exceptions.NonExistingClientException;
-import taxiservice.payments.models.ChargeAmount;
+import taxiservice.payments.models.Client;
+import taxiservice.payments.models.PaymentsHistory;
+import taxiservice.payments.models.Wallet;
 import taxiservice.payments.utils.HibernateUtil;
 
 import java.sql.Timestamp;
@@ -18,28 +19,28 @@ public class PaymentService {
 
     public double getCreditForClient(long clientId) throws NonExistingClientException {
         openSession();
-        String hql = "FROM Wallet WHERE clientId =" + clientId;
+        String hql = "FROM Client WHERE clientId =" + clientId;
         Query query = session.createQuery(hql);
-        List<Wallet> result = query.list();
+        List<Client> result = query.list();
         closeSession();
         if (result.isEmpty()) {
             throw new NonExistingClientException(clientId);
         } else {
-            return result.get(0).getAmount();
+            return result.get(0).getWallet().getAmount();
         }
 
     }
 
     public Wallet getClientWallet(long clientId) throws NonExistingClientException {
         openSession();
-        String hql = "FROM Wallet WHERE clientId =" + clientId;
+        String hql = "FROM Client WHERE clientId =" + clientId;
         Query query = session.createQuery(hql);
-        List<Wallet> result = query.list();
+        List<Client> result = query.list();
         closeSession();
         if (result.isEmpty()) {
             throw new NonExistingClientException(clientId);
         } else {
-            return result.get(0);
+            return result.get(0).getWallet();
         }
 
     }
@@ -49,9 +50,9 @@ public class PaymentService {
         double currentAmount = clientWallet.getAmount() + chargeAmount.getAmount();
         openSession();
         addPaymentHistory(clientWallet.getWalletid(), chargeAmount.getAmount(), chargeAmount.getCurrency(), chargeAmount.getPayment_type());
-        Query query = session.createQuery("update Wallet set amount = :updateAmount" + " where clientId = :clientId");
+        Query query = session.createQuery("update Wallet set amount = :updateAmount" + " where walletid = :walletId");
         query.setParameter("updateAmount", currentAmount);
-        query.setParameter("clientId", chargeAmount.getClientId());
+        query.setParameter("walletId", clientWallet.getWalletid());
         query.executeUpdate();
         closeSession();
         return currentAmount;
@@ -60,7 +61,7 @@ public class PaymentService {
     public List<PaymentsHistory> getPaymentsForClients(long clientId) throws NonExistingClientException {
         Wallet clientWallet = getClientWallet(clientId);
         openSession();
-        String hql = "FROM PaymentsHistory WHERE wallet_id =" + clientWallet.getWalletid();
+        String hql = "FROM PaymentsHistory WHERE wallet =" + clientWallet.getWalletid();
         Query query = session.createQuery(hql);
         List<PaymentsHistory> result = query.list();
         closeSession();

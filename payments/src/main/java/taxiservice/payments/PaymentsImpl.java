@@ -2,10 +2,10 @@ package taxiservice.payments;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import taxiservice.payments.dto.PaymentsHistory;
+import taxiservice.payments.dto.ChargeAmount;
+import taxiservice.payments.dto.Payment;
 import taxiservice.payments.exceptions.NonExistingClientException;
-import taxiservice.payments.models.ChargeAmount;
-import taxiservice.payments.models.Payment;
+import taxiservice.payments.models.PaymentsHistory;
 import taxiservice.payments.services.PaymentService;
 
 import javax.ws.rs.*;
@@ -83,8 +83,8 @@ public class PaymentsImpl implements IPayments {
 
         for (PaymentsHistory p : paymentsList) {
             JSONObject formDetailsJson = new JSONObject();
-            formDetailsJson.put("paymentid", p.getPaymentid());
-            formDetailsJson.put("wallet_id", p.getWallet_id());
+            formDetailsJson.put("paymentid", p.getPaymentId());
+            formDetailsJson.put("wallet_id", p.getWallet().getWalletid());
             Timestamp timestamp = p.getPayment_time();
             Date date = new Date(timestamp.getTime());
             formDetailsJson.put("payment_time", date);

@@ -1,38 +1,38 @@
-package taxiservice.payments.dto;
+package taxiservice.payments.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "payments_history", schema = "taxiservice")
 public class PaymentsHistory {
 
-    long paymentid;
-    long wallet_id;
-    Timestamp payment_time;
-    double amount;
-    String currency;
-    String payment_type;
+   private long paymentid;
+   private Wallet wallet;
+   private Timestamp payment_time;
+   private double amount;
+   private String currency;
+   private String payment_type;
 
     @Id
-    public long getPaymentid() {
+    @GeneratedValue
+    @Column(name = "paymentid")
+    public long getPaymentId() {
         return paymentid;
     }
 
-    public void setPaymentid(long paymentid) {
+    public void setPaymentId(long paymentid) {
         this.paymentid = paymentid;
     }
 
-    @Column(name = "wallet_id")
-    public long getWallet_id() {
-        return wallet_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wallet_id", nullable = false)
+    public Wallet getWallet() {
+        return wallet;
     }
 
-    public void setWallet_id(long wallet_id) {
-        this.wallet_id = wallet_id;
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     @Column(name = "payment_time")
