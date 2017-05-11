@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script>
+        function getXml() {
+            var xml =
+            "<order> \r\n<clientId> 1 <\/clientId>\r\n<orderId> 231 <\/orderId>\r\n<cost> 231.10 <\/cost>\r\n<startLocation> Wroclaw, Hallera 31 <\/startLocation>\r\n<endLocation> Wroclaw, Kazimierza Wielkiego 8 <\/endLocation>\r\n<status>W realizacji<\/status>\r\n<\/order>";
+             var parser = new DOMParser();
+            return parser.parseFromString(xml, "text/xml");
+        }
+
+        function getXsl() {
+            var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http:\/\/www.w3.org\/1999\/XSL\/Transform\">\r\n<xsl:template match=\"\/\">\r\n<html> \r\n<body>\r\n<span class=\"glyphicons glyphicons-car\"><\/span>\r\n<h2>Szczeg\u00F3\u0142y zam\u00F3wienia:<\/h2>\r\n  <h3>Numer: <xsl:value-of select=\"order\/orderId\"\/><h3>\r\n<h4>Miejsce startu: <xsl:value-of select=\"order\/startLocation\"\/><h4>\r\n<h4>Miejsce docelowe: <xsl:value-of select=\"order\/endLocation\"\/><h4>\r\n<h2>Szacowany koszt: <xsl:value-of select=\"order\/cost\"\/><\/h2>\r\n<xsl:variable name=\"status\" select=\"order\/status\"\/>\r\n<xsl:choose>\r\n    <xsl:when test=\"$status = \'W realizacji\'\">\r\n     <h2>Zam\u00F3wienie jest realizowane<h2>\r\n    <\/xsl:when>\r\n <xsl:otherwise>\r\n     <h2>ZAM\u00D3WIENIE ANULOWANE<h2>\r\n  <\/xsl:otherwise>\r\n<\/xsl:choose>\r\n<\/body>\r\n<\/html>\r\n<\/xsl:template>\r\n<\/xsl:stylesheet>\r\n";
+            var parser = new DOMParser();
+            return parser.parseFromString(xml, "text/xml");
+        }
+
+        function displayResult() {
+            var xmlDoc = getXml();
+            var xslDoc = getXsl();
+
+            // code for IE
+            if (window.ActiveXObject) //|| xhttp.responseType == "msxml-document"
+            {
+                ex = xml.transformNode(xsl);
+                document.getElementById("example").innerHTML = ex;
+            }
+            // code for Chrome, Firefox, Opera, etc.
+            else if (document.implementation && document.implementation.createDocument) {
+                xsltProcessor = new XSLTProcessor();
+                xsltProcessor.importStylesheet(xslDoc);
+                resultDocument = xsltProcessor.transformToFragment(xmlDoc, document);
+                document.getElementById("example").appendChild(resultDocument);
+            }
+        }
+    </script>
+</head>
+
+<body onload="displayResult()">
+    <span class="glyphicon glyphicon-road"></span>
+<h2>Szczegóły zamówienia:</h2>
+  <h3>Numer: <xsl:value-of select="order/orderId"/></h3>
+<h4>Miejsce startu: <xsl:value-of select="order/startLocation"/></h4>
+<h4>Miejsce docelowe: <xsl:value-of select="order/endLocation"/></h4>
+<h2>Szacowany koszt: <xsl:value-of select="order/cost"/></h2>
+<xsl:variable name="status" select="order/status"/>
+<xsl:choose>
+    <xsl:when test="$status = 'W realizacji'">
+     <h2>Zamówienie jest realizowane</h2>
+    </xsl:when>
+ <xsl:otherwise>
+     <h2>ZAMÓWIENIE ANULOWANE</h2>
+  </xsl:otherwise>
+</xsl:choose>
+
+    <div id="example" />
+    
+</body>
+
+</html>

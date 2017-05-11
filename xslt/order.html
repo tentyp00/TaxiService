@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script>
+        function getXml() {
+            var xml =
+                "<order> \r\n<clientId> 1 <\/clientId>\r\n<orderId> 231 <\/orderId>\r\n<cost> 231.10 <\/cost>\r\n<startLocation> Wroclaw, Hallera 31 <\/startLocation>\r\n<endLocation> Wroclaw, Kazimierza Wielkiego 8 <\/endLocation>\r\n<status>W realizacji<\/status>\r\n<\/order>";
+            var parser = new DOMParser();
+            return parser.parseFromString(xml, "text/xml");
+        }
+
+        function getXsl() {
+            var xml =
+           "<\/br>\r\n    <div class=\"container\">\r\n        <div class=\"panel panel-primary\">\r\n            <div class=\"panel-heading\">\r\n                <h1 class=\"text-center\">Szczeg\u00F3\u0142y zam\u00F3wienia:<\/h1>\r\n            <\/div>\r\n            <div class=\"panel-body\">\r\n                <h4>Numer:\r\n                    <xsl:value-of select=\"order\/orderId\" \/>\r\n                <\/h4>\r\n                <h4>Miejsce startu:\r\n                    <xsl:value-of select=\"order\/startLocation\" \/>\r\n                <\/h4>\r\n                <h4>Miejsce docelowe:\r\n                    <xsl:value-of select=\"order\/endLocation\" \/>\r\n                <\/h4>\r\n                <h3>Szacowany koszt:\r\n                    <xsl:value-of select=\"order\/cost\" \/> z\u0142\r\n                <\/h3>\r\n                <xsl:variable name=\"status\" select=\"order\/status\" \/>\r\n                <xsl:choose>\r\n                    <xsl:when test=\"$status = \'W realizacji\'\">\r\n                        <div class=\"alert alert-success\" role=\"alert\">\r\n                            <p class=\"text-center\">Zam\u00F3wienie jest realizowane<\/p>\r\n                        <\/div>\r\n                    <\/xsl:when>\r\n                    <xsl:otherwise>\r\n                        <div class=\"alert alert-danger\" role=\"alert\">\r\n                            <p class=\"text-center\">ZAM\u00D3WIENIE ANULOWANE<\/p>\r\n                        <\/div>\r\n                    <\/xsl:otherwise>\r\n                <\/xsl:choose>\r\n            <\/div>\r\n        <\/div>\r\n    <\/div>\r\n";
+            var parser = new DOMParser();
+            return parser.parseFromString(xml, "text/xml");
+        }
+
+        function displayResult() {
+            var xmlDoc = getXml();
+            var xslDoc = getXsl();
+
+            // code for IE
+            if (window.ActiveXObject) //|| xhttp.responseType == "msxml-document"
+            {
+                ex = xml.transformNode(xsl);
+                document.getElementById("example").innerHTML = ex;
+            }
+            // code for Chrome, Firefox, Opera, etc.
+            else if (document.implementation && document.implementation.createDocument) {
+                xsltProcessor = new XSLTProcessor();
+                xsltProcessor.importStylesheet(xslDoc);
+                resultDocument = xsltProcessor.transformToFragment(xmlDoc, document);
+                document.getElementById("example").appendChild(resultDocument);
+            }
+        }
+    </script>
+</head>
+
+<body onload="displayResult()">
+    <div id="example" />
+    
+</body>
+</html>

@@ -1,0 +1,84 @@
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\csc.exe
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\Microsoft.CodeAnalysis.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\Microsoft.CSharp.Core.targets
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\Microsoft.VisualBasic.Core.targets
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\System.Collections.Immutable.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\System.Reflection.Metadata.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\vbc.exe
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\VBCSCompiler.exe
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\roslyn\VBCSCompiler.exe.config
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Xslt.dll.config
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Xslt.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Xslt.pdb
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Antlr3.Runtime.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Microsoft.Web.Infrastructure.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Newtonsoft.Json.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Helpers.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Mvc.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Optimization.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Razor.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.WebPages.Deployment.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.WebPages.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.WebPages.Razor.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\WebGrease.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Helpers.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Mvc.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Optimization.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.Razor.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.WebPages.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.WebPages.Deployment.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\System.Web.WebPages.Razor.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Antlr3.Runtime.pdb
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\Newtonsoft.Json.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\obj\Debug\Xslt.csprojResolveAssemblyReference.cache
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\obj\Debug\Xslt.dll
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\obj\Debug\Xslt.pdb
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\App_Data\Order.xml
+c:\users\tomek\documents\visual studio 2015\Projects\Xslt\bin\App_Data\OrderTransformation.xsl
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\csc.exe
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\vbc.exe
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\VBCSCompiler.exe
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\App_Data\Order.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\App_Data\OrderTransformation.xsl
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Xslt.dll.config
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Xslt.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Xslt.pdb
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Antlr3.Runtime.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Newtonsoft.Json.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Helpers.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Mvc.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Optimization.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Razor.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.WebPages.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.WebPages.Razor.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\WebGrease.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Helpers.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Mvc.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Optimization.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.Razor.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.WebPages.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\System.Web.WebPages.Razor.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Antlr3.Runtime.pdb
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\bin\Newtonsoft.Json.xml
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\obj\Debug\Xslt.csprojResolveAssemblyReference.cache
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\obj\Debug\Xslt.dll
+C:\Users\Monika\Documents\TaxiService\xslt\Projects\Xslt\obj\Debug\Xslt.pdb

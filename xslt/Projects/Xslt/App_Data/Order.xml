@@ -1,0 +1,8 @@
+<order>
+  <clientId> 1 </clientId>
+  <orderId> 231 </orderId>
+  <cost> 231.10 </cost>
+  <startLocation> Wroclaw, Hallera 31 </startLocation>
+  <endLocation> Wroclaw, Kazimierza Wielkiego 8 </endLocation>
+  <status>cancelled</status>
+</order>
