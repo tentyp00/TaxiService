@@ -46,6 +46,7 @@ public class PaymentsImpl implements IPayments {
 			
 		} catch (NonExistingClientException e) {
 			responseDetailsJson.put(Constants.ERROR, e.getMessage());
+			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		} catch (JsonGenerationException e) {
 			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
 			return Response.status(400).entity(responseDetailsJson.toString()).build();
@@ -53,6 +54,9 @@ public class PaymentsImpl implements IPayments {
 			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
 			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		} catch (IOException e) {
+			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
+			return Response.status(400).entity(responseDetailsJson.toString()).build();
+		}catch (Exception e) {
 			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
 			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		}
@@ -82,6 +86,9 @@ public class PaymentsImpl implements IPayments {
 		} catch (IOException e) {
 			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
 			return Response.status(400).entity(responseDetailsJson.toString()).build();
+		}catch (Exception e) {
+			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
+			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		}
 		return Response.status(200).entity(response).build();
 
@@ -109,6 +116,9 @@ public class PaymentsImpl implements IPayments {
 		} catch (IOException e) {
 			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
 			return Response.status(400).entity(responseDetailsJson.toString()).build();
+		} catch (Exception e) {
+			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
+			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		}
 		return Response.status(200).entity(response).build();
 	}
@@ -119,13 +129,18 @@ public class PaymentsImpl implements IPayments {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAccountHistory(@PathParam("param") long clientId) {
 		List<PaymentsHistory> paymentsList;
+		JSONObject responseDetailsJson = new JSONObject();
 		try {
 			paymentsList = paymentService.getPaymentsForClients(clientId);
 		} catch (NonExistingClientException e) {
-			return Response.status(404).entity(e.getMessage()).build();
+			responseDetailsJson.put(Constants.ERROR, e.getMessage());
+			return Response.status(400).entity(responseDetailsJson.toString()).build();
+		}catch (Exception e) {
+			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
+			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		}
 
-		JSONObject responseDetailsJson = new JSONObject();
+		
 		JSONArray jsonArray = new JSONArray();
 		
 		int counter = 0;
