@@ -2,11 +2,13 @@ package taxiservice.login.services;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import taxiservice.login.model.LoginHistory;
 import taxiservice.login.model.SystemUser;
 import taxiservice.login.utils.HibernateUtil;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by bartl on 09.05.2017.
@@ -28,13 +30,34 @@ public class LoginService implements ILoginService {
 
         Date data = new Date();
         openSession();
-        Query query = session.createSQLQuery("INSERT INTO Login_History (user_id, login_time, logout_time) "
-                + "VALUES ( :user_id, :login_time,:logout_time)");
+        Query query = session.createSQLQuery("INSERT INTO taxiservice.login_history (user_id, login_time) "
+                + "VALUES ( :user_id, :login_time)");
         query.setParameter("user_id", userID);
         query.setParameter("login_time", new Timestamp(data.getTime()));
-        query.setParameter("logout_time", null);
         query.executeUpdate();
         closeSession();
+    }
+
+    public void addLogoutHistory(long loginID, long userID) {
+
+        Date data = new Date();
+        openSession();
+        Query query = session.createQuery("UPDATE LoginHistory set logout_time = :logout_time " +
+                "where login_id = :loginID and user_id = :userID");
+        query.setParameter("loginID", loginID);
+        query.setParameter("userID", userID);
+        query.setParameter("logout_time", new Timestamp(data.getTime()));
+        query.executeUpdate();
+        closeSession();
+    }
+
+    public List<LoginHistory> getLoginHistory(long userID) {
+        openSession();
+        Query query = session.createQuery("from LoginHistory where user_id = :userID");
+        query.setParameter("userID", userID);
+        List<LoginHistory> loginHistories = query.list();
+        closeSession();
+        return loginHistories;
     }
 
     public void openSession() {

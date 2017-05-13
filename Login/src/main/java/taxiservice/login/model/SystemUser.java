@@ -2,6 +2,8 @@ package taxiservice.login.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bartl on 07.05.2017.
@@ -19,6 +21,7 @@ public class SystemUser {
     private String password;
     private Timestamp join_date;
     private String phone_number;
+    private List<LoginHistory> loginHistory = new ArrayList<>();
 
     public SystemUser() {
     }
@@ -106,5 +109,14 @@ public class SystemUser {
 
     public void setPhoneNumber(String phone_number) {
         this.phone_number = phone_number;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "systemUser")
+    public List<LoginHistory> getLoginHistory() {
+        return loginHistory;
+    }
+
+    public void setLoginHistory(List<LoginHistory> loginHistory) {
+        this.loginHistory = loginHistory;
     }
 }
