@@ -5,6 +5,8 @@ import org.json.simple.JSONObject;
 import taxiservice.payments.dto.ChargeAmount;
 import taxiservice.payments.dto.Payment;
 import taxiservice.payments.exceptions.NonExistingClientException;
+import taxiservice.payments.exceptions.NonExistingOrderException;
+import taxiservice.payments.exceptions.WalletAmountTooLowException;
 import taxiservice.payments.models.PaymentsHistory;
 import taxiservice.payments.services.PaymentService;
 
@@ -43,8 +45,17 @@ public class PaymentsImpl implements IPayments {
     @Path("/pay")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response pay(Payment payment) {
+    	
+        JSONObject responseDetailsJson = new JSONObject();
+        try {
+            paymentService.payForOrder(payment);
+            responseDetailsJson.put("payments", "ok");
+        } catch (NonExistingClientException | WalletAmountTooLowException | NonExistingOrderException e) {
+            responseDetailsJson.put("error", e.getMessage());
+            return Response.status(400).entity(responseDetailsJson.toString()).build();
+        }
+        return Response.status(200).entity(responseDetailsJson.toString()).build();
 
-        return Response.status(200).entity(payment.toString()).build();
     }
 
     @SuppressWarnings("unchecked")

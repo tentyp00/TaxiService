@@ -18,6 +18,7 @@
 		<mapping class="taxiservice.payments.models.PaymentsHistory" />
 		<mapping class="taxiservice.payments.models.Client" />
 		<mapping class="taxiservice.payments.models.SystemUser" />
+		<mapping class="taxiservice.payments.models.Order" />
 		
 
 	</session-factory>
