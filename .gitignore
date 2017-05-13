@@ -1,0 +1,4 @@
+order_webservice/out/artifacts/order_webservice_war_exploded/index.jsp
+order_webservice/out/artifacts/order_webservice_war_exploded/WEB-INF/web.xml
+order_webservice/out/artifacts/order_webservice_war_exploded/WEB-INF/classes/taxiservice/order/HelloWorld.class
+order_webservice/out/production/order_webservice/taxiservice/order/HelloWorld.class
