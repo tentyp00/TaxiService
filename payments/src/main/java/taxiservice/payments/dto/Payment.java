@@ -3,7 +3,7 @@ package taxiservice.payments.dto;
 public class Payment {
     long clientId;
     long orderId;
-
+    
     public long getClientId() {
         return clientId;
     }
