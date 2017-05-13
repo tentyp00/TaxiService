@@ -13,7 +13,7 @@ public class Wallet {
     private double amount;
     private String currency;
     private boolean isActive;
-    private List<PaymentsHistory> paymentsHistoryList = new ArrayList<>();
+    private List<PaymentsHistory> paymentsHistory = new ArrayList<>();
 
     public Wallet() {
     }
@@ -63,12 +63,12 @@ public class Wallet {
         this.currency = currency;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    public List<PaymentsHistory> getPaymentsHistoryList() {
-        return paymentsHistoryList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "wallet")
+    public List<PaymentsHistory> getPaymentsHistory() {
+        return paymentsHistory;
     }
 
-    public void setPaymentsHistoryList(List<PaymentsHistory> paymentsHistoryList) {
-        this.paymentsHistoryList = paymentsHistoryList;
+    public void setPaymentsHistory(List<PaymentsHistory> paymentsHistoryList) {
+        this.paymentsHistory = paymentsHistoryList;
     }
 }
