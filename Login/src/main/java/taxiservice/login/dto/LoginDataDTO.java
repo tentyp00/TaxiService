@@ -5,27 +5,30 @@ package taxiservice.login.dto;
  */
 public class LoginDataDTO {
 
-    String login;
-    String password;
+    String userLogin;
+    String userPassword;
 
-    public LoginDataDTO(String login, String password) {
-        this.login = login;
-        this.password = password;
+    public LoginDataDTO() {
+    }
+
+    public LoginDataDTO(String userLogin, String userPassword) {
+        this.userLogin = userLogin;
+        this.userPassword = userPassword;
     }
 
     public String getUserLogin() {
-        return login;
+        return userLogin;
     }
 
-    public void setUserLogin(String login) {
-        this.login = login;
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public String getUserPassword() {
-        return password;
+        return userPassword;
     }
 
-    public void setUserPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 }

@@ -8,4 +8,5 @@ import taxiservice.login.model.SystemUser;
 public interface ILoginService {
 
     SystemUser getUserLogin(String login);
+    void addLoginHistory(long userID);
 }

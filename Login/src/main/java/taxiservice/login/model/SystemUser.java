@@ -63,7 +63,7 @@ public class SystemUser {
         this.last_name = last_name;
     }
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     public String getEmail() {
         return email;
     }
@@ -72,7 +72,7 @@ public class SystemUser {
         this.email = email;
     }
 
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     public String getLogin() {
         return login;
     }
