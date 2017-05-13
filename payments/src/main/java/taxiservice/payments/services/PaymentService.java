@@ -19,7 +19,7 @@ public class PaymentService {
 
     public double getCreditForClient(long clientId) throws NonExistingClientException {
         openSession();
-        String hql = "FROM Client WHERE clientId =" + clientId;
+        String hql = "FROM Client WHERE client_Id =" + clientId;
         Query query = session.createQuery(hql);
         List<Client> result = query.list();
         closeSession();
@@ -32,11 +32,11 @@ public class PaymentService {
     }
 
     public Wallet getClientWallet(long clientId) throws NonExistingClientException {
-        openSession();
-        String hql = "FROM Client WHERE clientId =" + clientId;
+        
+        String hql = "FROM Client WHERE client_Id =" + clientId;
         Query query = session.createQuery(hql);
         List<Client> result = query.list();
-        closeSession();
+        
         if (result.isEmpty()) {
             throw new NonExistingClientException(clientId);
         } else {
@@ -46,22 +46,26 @@ public class PaymentService {
     }
 
     public double addCreditForClient(ChargeAmount chargeAmount) throws NonExistingClientException {
-        Wallet clientWallet = getClientWallet(chargeAmount.getClientId());
+    	openSession();
+    	Wallet clientWallet = getClientWallet(chargeAmount.getClientId());
+        
+        System.out.println(clientWallet.toString());
+        
         double currentAmount = clientWallet.getAmount() + chargeAmount.getAmount();
-        openSession();
-        addPaymentHistory(clientWallet.getWalletid(), chargeAmount.getAmount(), chargeAmount.getCurrency(), chargeAmount.getPayment_type());
-        Query query = session.createQuery("update Wallet set amount = :updateAmount" + " where walletid = :walletId");
+        System.out.println("wchodze");
+        addPaymentHistory(clientWallet.getId(), chargeAmount.getAmount(), chargeAmount.getCurrency(), chargeAmount.getPayment_type());
+        Query query = session.createQuery("update Wallet set amount = :updateAmount" + " where wallet_Id = :wallet_Id");
         query.setParameter("updateAmount", currentAmount);
-        query.setParameter("walletId", clientWallet.getWalletid());
+        query.setParameter("wallet_Id", clientWallet.getId());
         query.executeUpdate();
         closeSession();
         return currentAmount;
     }
 
     public List<PaymentsHistory> getPaymentsForClients(long clientId) throws NonExistingClientException {
-        Wallet clientWallet = getClientWallet(clientId);
         openSession();
-        String hql = "FROM PaymentsHistory WHERE wallet =" + clientWallet.getWalletid();
+        Wallet clientWallet = getClientWallet(clientId);
+        String hql = "FROM PaymentsHistory WHERE wallet =" + clientWallet.getId();
         Query query = session.createQuery(hql);
         List<PaymentsHistory> result = query.list();
         closeSession();
@@ -76,9 +80,9 @@ public class PaymentService {
     public void addPaymentHistory(long walletId, double amount, String currency, String payment_type) {
         Date data = new Date();
 
-        Query query = session.createSQLQuery("INSERT INTO Payments_History (wallet_id, payment_time,amount,currency,payment_type) "
-                + "VALUES (:walletId, :payment_time,:amount,:currency,:payment_type)");
-        query.setParameter("walletId", walletId);
+        Query query = session.createSQLQuery("INSERT INTO Payments_History (wallet_Id, payment_time,amount,currency,payment_type) "
+                + "VALUES ( :wallet_Id, :payment_time,:amount,:currency,:payment_type)");
+        query.setParameter("wallet_Id", walletId);
         query.setParameter("payment_time", new Timestamp(data.getTime()));
         query.setParameter("amount", amount);
         query.setParameter("currency", currency);
@@ -87,7 +91,11 @@ public class PaymentService {
     }
 
     public void openSession() {
+    	System.out.println("session == null "+session == null?true:false);
+    	if(session!=null)
+    	{System.out.println("!session.isOpen() "+!session.isOpen());}
         if (session == null || !session.isOpen()) {
+        	System.out.println(("otwieram"));
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
         }
@@ -95,6 +103,7 @@ public class PaymentService {
 
     public void closeSession() {
         if (session != null && session.isOpen()) {
+        	System.out.println(("zamykam"));
             session.getTransaction().commit();
             session.close();
         }

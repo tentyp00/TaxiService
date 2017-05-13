@@ -83,8 +83,8 @@ public class PaymentsImpl implements IPayments {
 
         for (PaymentsHistory p : paymentsList) {
             JSONObject formDetailsJson = new JSONObject();
-            formDetailsJson.put("paymentid", p.getPaymentId());
-            formDetailsJson.put("wallet_id", p.getWallet().getWalletid());
+            formDetailsJson.put("paymentid", p.getId());
+            formDetailsJson.put("wallet_id", p.getWallet().getId());
             Timestamp timestamp = p.getPayment_time();
             Date date = new Date(timestamp.getTime());
             formDetailsJson.put("payment_time", date);
