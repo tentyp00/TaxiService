@@ -1,0 +1,24 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="connection.driver_class">org.postgresql.Driver</property>
+		<property name="connection.url">jdbc:postgresql://207.154.222.0:5432/taxiservice</property>
+		<property name="connection.username">xxx</property>
+		<property name="connection.password">yyy</property>
+		<property name="connection.pool_size">10</property>
+		<property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+		<property name="hibernate.jdbc.use_get_generated_keys">true</property>
+		<property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+		<property name="show_sql">true</property>
+		<property name="hbm2ddl.auto">update</property>
+		<mapping class="taxiservice.payments.models.Wallet" />
+		<mapping class="taxiservice.payments.models.PaymentsHistory" />
+		<mapping class="taxiservice.payments.models.Client" />
+		<mapping class="taxiservice.payments.models.SystemUser" />
+		
+
+	</session-factory>
+</hibernate-configuration> 
