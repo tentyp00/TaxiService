@@ -2,6 +2,7 @@ package taxiservice.login.services;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import taxiservice.login.exceptions.NonExistingUserException;
 import taxiservice.login.model.LoginHistory;
 import taxiservice.login.model.SystemUser;
 import taxiservice.login.utils.HibernateUtil;
@@ -17,13 +18,17 @@ public class LoginService implements ILoginService {
 
     Session session;
 
-    public SystemUser getUserLogin(String login) {
+    public SystemUser getUserLogin(String login) throws NonExistingUserException {
         openSession();
         Query query = session.createQuery("from SystemUser where login = :login");
         query.setParameter("login", login);
-        SystemUser user = (SystemUser) query.list().get(0);
+        List<SystemUser> users = query.list();
+        if (users.isEmpty()) {
+            throw new NonExistingUserException(login);
+        }
         closeSession();
-        return user;
+        return users.get(0);
+
     }
 
     public void addLoginHistory(long userID) {

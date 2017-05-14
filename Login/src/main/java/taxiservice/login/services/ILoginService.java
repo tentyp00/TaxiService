@@ -1,5 +1,6 @@
 package taxiservice.login.services;
 
+import taxiservice.login.exceptions.NonExistingUserException;
 import taxiservice.login.model.LoginHistory;
 import taxiservice.login.model.SystemUser;
 
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public interface ILoginService {
 
-    SystemUser getUserLogin(String login);
+    SystemUser getUserLogin(String login) throws NonExistingUserException;
     void addLoginHistory(long userID);
     void addLogoutHistory(long loginID, long userID);
     List<LoginHistory> getLoginHistory(long userID);

@@ -37,19 +37,14 @@ public class Logout {
                 }
             });
 
-
             loginService.addLogoutHistory(loginHistories.get(0).getId(), Long.valueOf(userID));
 
-            String response = "Logged out!";
-            return Response.status(200).entity(response).build();
         } catch (Exception e) {
             String response = "Not logged out!";
-            e.printStackTrace();
-
             return Response.status(500).entity(response).build();
-
         }
 
-
+        String response = "Logged out!";
+        return Response.status(200).entity(response).build();
     }
 }
