@@ -34,11 +34,10 @@ public class Register {
 		}
 		catch (AlreadyExistingLoginException e) {
 			responseJsonObject.put(Constants.ERROR, e.getMessage());
-			return Response.status(40).entity(responseJsonObject.toString()).build();
+			return Response.status(400).entity(responseJsonObject.toString()).build();
 		}
 		catch (Exception e) {
 			responseJsonObject.put(Constants.ERROR, e.getClass().getCanonicalName());
-			e.printStackTrace();
 			return Response.status(400).entity(responseJsonObject.toString()).build();
 		}
 		responseJsonObject.put("isSuccess", true);

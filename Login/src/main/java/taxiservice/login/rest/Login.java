@@ -46,7 +46,6 @@ public class Login {
             return Response.status(404).entity(responseJsonObject.toString()).build();
         } catch (Exception e) {
             responseJsonObject.put(Constants.ERROR, e.getClass().getCanonicalName());
-            e.printStackTrace();
             return Response.status(400).entity(responseJsonObject.toString()).build();
         }
 
