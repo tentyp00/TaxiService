@@ -9,11 +9,11 @@ public class NonExistingOrderException extends Exception {
     final String message;
 
     public NonExistingOrderException(int clientId, int orderId) {
-        this.message = "Order with id=" + clientId + "for client=" + clientId + " not found.";
+        this.message = "Order with id= " + orderId + " for client= " + clientId + " not found.";
     }
 
     public NonExistingOrderException(int orderId) {
-        this.message = "Order with id=" + orderId + " not found.";
+        this.message = "Order with id= " + orderId + " not found.";
     }
 
     public String getMessage() {

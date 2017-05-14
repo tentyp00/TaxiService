@@ -5,10 +5,7 @@ import taxiservice.order.dto.EndTravelDto;
 import taxiservice.order.dto.OrderAssignmentDto;
 import taxiservice.order.model.OrderManager;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -28,15 +25,17 @@ public class Order {
     }
 
     @GET
-    @Path("/getOrderDetails")
-    public Response getOrderDetails() {
-        return Response.status(200).build();
+    @Path("/getOrderDetails/{orderId}/{clientId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrderDetails(@PathParam("orderId") int orderId, @PathParam("clientId") int clientId) {
+        return getManager().getOrderDetails(orderId, clientId);
     }
 
     @GET
-    @Path("/getOrders")
-    public Response getOrders() {
-        return Response.status(200).build();
+    @Path("/getOrders/{driverId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrders(@PathParam("driverId") int driverId) {
+        return getManager().getOrders(driverId);
     }
 
     @POST
@@ -48,17 +47,19 @@ public class Order {
 
     @POST
     @Path("/assignToOrder")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response assignToOrder(OrderAssignmentDto assignmentDto) {
         return getManager().assignToOrder(assignmentDto);
     }
 
     @POST
     @Path("/endTravel")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response endTravel(EndTravelDto endTravelDto) {
         return getManager().endTravel(endTravelDto);
     }
 
-    public OrderManager getManager() {
+    private OrderManager getManager() {
         return new OrderManager();
     }
 }

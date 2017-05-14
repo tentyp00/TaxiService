@@ -6,19 +6,26 @@
 		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="connection.driver_class">org.postgresql.Driver</property>
 		<property name="connection.url">jdbc:postgresql://207.154.222.0:5432/taxiservice</property>
-		<property name="connection.username">xxx</property>
-		<property name="connection.password">yyy</property>
+		<property name="connection.username">taxidatabase</property>
+		<property name="connection.password">qwe098</property>
 		<property name="connection.pool_size">10</property>
 		<property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
 		<property name="hibernate.jdbc.use_get_generated_keys">true</property>
 		<property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
 		<property name="show_sql">true</property>
 		<property name="hbm2ddl.auto">update</property>
-		<mapping class="taxiservice.payments.models.Wallet" />
-		<mapping class="taxiservice.payments.models.PaymentsHistory" />
-		<mapping class="taxiservice.payments.models.Client" />
-		<mapping class="taxiservice.payments.models.SystemUser" />
-		
+        <mapping class="taxiservice.order.model.ClientsEntity"/>
+        <mapping class="taxiservice.order.model.OrdersEntity"/>
+        <mapping class="taxiservice.order.model.ShiftsEntity"/>
+        <mapping class="taxiservice.order.model.CarModelsEntity"/>
+        <mapping class="taxiservice.order.model.CarsEntity"/>
+        <mapping class="taxiservice.order.model.LoginHistoryEntity"/>
+        <mapping class="taxiservice.order.model.PaymentsHistoryEntity"/>
+        <mapping class="taxiservice.order.model.PlaygroundEntity"/>
+        <mapping class="taxiservice.order.model.SystemUsersEntity"/>
+        <mapping class="taxiservice.order.model.TaxiDriversEntity"/>
+        <mapping class="taxiservice.order.model.WalletsEntity"/>
 
-	</session-factory>
+
+    </session-factory>
 </hibernate-configuration> 

@@ -1,18 +1,18 @@
 package taxiservice.order.model;
 
+import org.hibernate.criterion.Restrictions;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import taxiservice.order.dto.CancelOrderDto;
 import taxiservice.order.dto.EndTravelDto;
 import taxiservice.order.dto.Order;
 import taxiservice.order.dto.OrderAssignmentDto;
-import taxiservice.order.exceptions.NonExistingOrderException;
-import taxiservice.order.exceptions.NonExistingShiftException;
-import taxiservice.order.exceptions.NotCancellableStatusException;
-import taxiservice.order.exceptions.NotInProgressStatusException;
+import taxiservice.order.exceptions.*;
 import taxiservice.order.services.IOrderService;
 import taxiservice.order.services.OrderService;
 
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by monikanowakowicz on 13/05/2017.
@@ -23,7 +23,7 @@ public class OrderManager {
 
         if (userId == 0) {
             String response = "{ valid: false, reason:\"login\" }";
-            return Response.status(500).entity(response).build();
+            return Response.status(400).entity(response).build();
         }
 
         try
@@ -32,81 +32,133 @@ public class OrderManager {
             int orderId = service.createOrder(userId);
             String response = "{ orderId:\"" + orderId + "\" }";
 
-            return Response.status(200).entity(response).build();
+            return Response.status(201).entity(response).build();
         }
         catch (Exception e) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("validLogin", false);
-            String response = "{ valid: false, reason:\"other\" }";
-            e.printStackTrace();
-
-            return Response.status(500).entity(response).build();
+            return Response.status(500).build();
         }
     }
 
     public Response cancelOrder(CancelOrderDto cancelOrderDto) {
         if (cancelOrderDto.getOrderId() == 0 || cancelOrderDto.getUserId() == 0) {
-            String response = "{ valid: false, reason:\"parameters\" }";
-            return Response.status(500).entity(response).build();
+            String response = "{ valid: false, reason:\"orderId\", \"userId\" }";
+            return Response.status(400).entity(response).build();
         }
 
         try {
             IOrderService service = new OrderService();
             service.cancelOrder(cancelOrderDto);
-            return Response.status(200).entity("Successfully cancelled").build();
+            return Response.status(202).entity("Successfully cancelled").build();
         }
         catch (NotCancellableStatusException e) {
-            e.printStackTrace();
+            return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (NonExistingOrderException e) {
-            e.printStackTrace();
+            return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            return Response.status(500).build();
         }
-
-        return null;
     }
 
     public Response assignToOrder(OrderAssignmentDto assignmentDto) {
         if (assignmentDto.getOrderId() == 0 || assignmentDto.getShiftId() == 0 || assignmentDto.getDriverId() == 0) {
-            String response = "{ valid: false, reason:\"parameters\" }";
-            return Response.status(500).entity(response).build();
+            String response = "{ valid: false, reason:\"orderId\", \"shiftId\", \"driverId\" }";
+            return Response.status(400).entity(response).build();
         }
 
         try {
             IOrderService service = new OrderService();
             service.assignOrder(assignmentDto.getOrderId(), assignmentDto.getShiftId(), assignmentDto.getDriverId());
-            return Response.status(200).entity("Successfully assigned").build();
+            return Response.status(202).entity("Successfully assigned").build();
         } catch (NonExistingShiftException e) {
-            e.printStackTrace();
+            return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (NonExistingOrderException e) {
-            e.printStackTrace();
+            return CreateBadRequestWithMsgResponse(e.getMessage());
+        } catch (NotAssignableStatusException e) {
+            return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (Exception e) {
-
+            return Response.status(500).build();
         }
-
-        return null;
     }
 
     public Response endTravel(EndTravelDto endTravelDto) {
         if (endTravelDto.getOrderId() == 0 ||
                 endTravelDto.getShiftId() == 0 ||
                 endTravelDto.getDriverId() == 0) {
-            String response = "{ valid: false, reason:\"parameters\" }";
-            return Response.status(500).entity(response).build();
+            String response = "{ valid: false, reason:\"orderId\", \"shiftId\", \"driverId\" }";
+            return Response.status(400).entity(response).build();
         }
 
         try {
             IOrderService service = new OrderService();
             service.endOrderTravel(endTravelDto.getOrderId(), endTravelDto.getShiftId(), endTravelDto.getDriverId());
-            return Response.status(200).entity("Successfully ended").build();
+            return Response.status(202).entity("Successfully ended").build();
         } catch (NonExistingOrderException e) {
-            e.printStackTrace();
+            return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (NonExistingShiftException e) {
-            e.printStackTrace();
+            return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (NotInProgressStatusException e) {
-            e.printStackTrace();
+            return CreateBadRequestWithMsgResponse(e.getMessage());
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+    }
+
+    public Response getOrderDetails(int orderId, int clientId) {
+        if (orderId == 0 || clientId == 0) {
+        String response = "{ valid: false, reason:\"orderId\", \"clientId\" }";
+        return Response.status(400).entity(response).build();
+    }
+
+        try {
+            IOrderService service = new OrderService();
+            OrdersEntity order = service.getOrderDetails(orderId, clientId);
+
+            JSONObject responseDetailsJson = new JSONObject();
+            responseDetailsJson.put("orderId", order.getOrderId());
+            responseDetailsJson.put("status", order.getStatus());
+            responseDetailsJson.put("cost", order.getCost());
+
+            return Response.status(200).entity(responseDetailsJson.toString()).build();
+        } catch (NonExistingOrderException e) {
+            return CreateBadRequestWithMsgResponse(e.getMessage());
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+    }
+
+    public Response getOrders(int driverId) {
+        if (driverId == 0) {
+            String response = "{ valid: false, reason:\"driverId\" }";
+            return Response.status(400).entity(response).build();
         }
 
-        return null;
+        try {
+            IOrderService service = new OrderService();
+            List<OrdersEntity> orders = service.getOrders(driverId);
+
+            JSONObject responseObj = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+
+            int counter = 0;
+            for (OrdersEntity o : orders) {
+                counter++;
+                JSONObject formDetailsJson = new JSONObject();
+                formDetailsJson.put("orderId", o.getOrderId());
+                formDetailsJson.put("startLocation", o.getLocationStart());
+
+                jsonArray.add(formDetailsJson);
+            }
+
+            responseObj.put("size", counter);
+            responseObj.put("orders", jsonArray);
+
+            return Response.status(200).entity(responseObj.toString()).build();
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+    }
+
+    private Response CreateBadRequestWithMsgResponse(String message) {
+        return Response.status(400).entity(message).build();
     }
 }

@@ -1,6 +1,7 @@
 package taxiservice.order.services;
 
 
+import jdk.net.SocketFlow;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -79,6 +80,28 @@ public class OrderService implements IOrderService {
         closeSession();
     }
 
+    @Override
+    public OrdersEntity getOrderDetails(int orderId, int clientId) throws NonExistingOrderException {
+        openSession();
+        OrdersEntity order = getOrder(orderId, clientId);
+        closeSession();
+        return order;
+    }
+
+    @Override
+    public List<OrdersEntity> getOrders(int driverId) {
+        openSession();
+        List<OrdersEntity> orders = getOrdersForDriver(driverId);
+        closeSession();
+        return orders;
+    }
+
+    private List<OrdersEntity> getOrdersForDriver(int driverId) {
+        Criteria criteria = session.createCriteria(OrdersEntity.class);
+        criteria.add(Restrictions.eq("status", Constants.ORDERED));
+        return criteria.list();
+    }
+
     private OrdersEntity getOrderByShiftId(int orderId, int shiftId) throws NonExistingOrderException {
         Criteria criteria = session.createCriteria(OrdersEntity.class);
         criteria.add(Restrictions.eq("shiftId", shiftId));
@@ -86,7 +109,7 @@ public class OrderService implements IOrderService {
         List<OrdersEntity> result = criteria.list();
 
         if (result.isEmpty()) {
-            throw new NonExistingOrderException(shiftId, orderId);
+            throw new NonExistingOrderException(orderId);
         } else {
             return result.get(0);
         }

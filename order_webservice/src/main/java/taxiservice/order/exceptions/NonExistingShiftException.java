@@ -9,7 +9,7 @@ public class NonExistingShiftException extends Exception {
     final String message;
 
     public NonExistingShiftException(int shiftId, int driverId) {
-        this.message = "Shift with id=" + shiftId + "for driver=" + driverId + " not found.";
+        this.message = "Shift with id= " + shiftId + " for driver= " + driverId + " not found.";
     }
 
     public String getMessage() {
