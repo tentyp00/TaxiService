@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="war" name="order_webservice:war">
     <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="Login-1.0-SNAPSHOT.war">
+    <root id="archive" name="order_webservice-1.0-SNAPSHOT.war">
       <element id="artifact" artifact-name="order_webservice:war exploded" />
     </root>
   </artifact>
