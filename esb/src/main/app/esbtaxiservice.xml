@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
 	xmlns:jbossts="http://www.mulesoft.org/schema/mule/jbossts" xmlns:file="http://www.mulesoft.org/schema/mule/file"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
@@ -11,7 +11,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
-http://www.mulesoft.org/schema/mule/jbossts http://www.mulesoft.org/schema/mule/jbossts/current/mule-jbossts.xsd">
+http://www.mulesoft.org/schema/mule/jbossts http://www.mulesoft.org/schema/mule/jbossts/current/mule-jbossts.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <jms:activemq-connector name="Active_MQ" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
     <jms:activemq-connector name="Active_MQ1" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
@@ -23,16 +24,15 @@ http://www.mulesoft.org/schema/mule/jbossts http://www.mulesoft.org/schema/mule/
             </http:response-builder>
         </http:listener>
         <byte-array-to-string-transformer doc:name="Byte Array to String"/>
-        <set-payload value="#[message.inboundProperties.'http.request.path'] 
-#[message.payload]" doc:name="Set Payload"/>
-        <set-variable variableName="request" value="#[payload]" doc:name="Variable"/>
+        <set-payload value="#[message.inboundProperties.'http.request.path'] %% #[message.payload]" doc:name="Set Payload"/>
         <jms:outbound-endpoint queue="esb" connector-ref="Active_MQ" doc:name="JMS"/>
 		<logger message="#[payload]" level="INFO" category="#[payload]" doc:name="Logger"/>
     </flow>
     <flow name="esbtaxiserviceFlow">
         <jms:inbound-endpoint queue="esb" connector-ref="Active_MQ1" doc:name="JMS"/>
         <byte-array-to-string-transformer doc:name="Byte Array to String"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="emailid" value="#[payload.split('%%')[0]]" doc:name="Variable"/>
+        <logger message="#[flowVars.emailid]" level="INFO" doc:name="Logger"/>
     </flow>
-    
+   
 </mule>
