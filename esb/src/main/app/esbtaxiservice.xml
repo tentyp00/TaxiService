@@ -14,6 +14,7 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
 http://www.mulesoft.org/schema/mule/jbossts http://www.mulesoft.org/schema/mule/jbossts/current/mule-jbossts.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <jms:activemq-connector name="Active_MQ" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
+    <jms:activemq-connector name="Active_MQ1" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
     <flow name="EsbTaxiServiceFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/*" doc:name="HTTP"  parseRequest="false">
             <http:response-builder disablePropertiesAsHeaders="true">
@@ -27,6 +28,11 @@ http://www.mulesoft.org/schema/mule/jbossts http://www.mulesoft.org/schema/mule/
         <set-variable variableName="request" value="#[payload]" doc:name="Variable"/>
         <jms:outbound-endpoint queue="esb" connector-ref="Active_MQ" doc:name="JMS"/>
 		<logger message="#[payload]" level="INFO" category="#[payload]" doc:name="Logger"/>
+    </flow>
+    <flow name="esbtaxiserviceFlow">
+        <jms:inbound-endpoint queue="esb" connector-ref="Active_MQ1" doc:name="JMS"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
     </flow>
     
 </mule>
