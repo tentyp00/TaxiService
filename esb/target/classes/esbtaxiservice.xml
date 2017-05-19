@@ -24,15 +24,17 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             </http:response-builder>
         </http:listener>
         <byte-array-to-string-transformer doc:name="Byte Array to String"/>
-        <set-payload value="#[message.inboundProperties.'http.request.path'] %% #[message.payload]" doc:name="Set Payload"/>
+        <set-payload value="#[message.inboundProperties.'http.request.path']%%#[message.payload]" doc:name="Set Payload"/>
         <jms:outbound-endpoint queue="esb" connector-ref="Active_MQ" doc:name="JMS"/>
 		<logger message="#[payload]" level="INFO" category="#[payload]" doc:name="Logger"/>
     </flow>
     <flow name="esbtaxiserviceFlow">
         <jms:inbound-endpoint queue="esb" connector-ref="Active_MQ1" doc:name="JMS"/>
         <byte-array-to-string-transformer doc:name="Byte Array to String"/>
-        <set-variable variableName="emailid" value="#[payload.split('%%')[0]]" doc:name="Variable"/>
-        <logger message="#[flowVars.emailid]" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="url" value="#[payload.split('%%')[0]]" doc:name="Variable"/>
+        <set-variable variableName="payloads" value="#[payload.split('%%')[1]]" doc:name="Variable"/>
+        <logger message="#[flowVars.url] + #[flowVars.payloads]" level="INFO" doc:name="Logger"/>
     </flow>
    
 </mule>
+
