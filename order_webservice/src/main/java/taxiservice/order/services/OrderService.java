@@ -51,12 +51,11 @@ public class OrderService implements IOrderService {
         OrdersEntity order = getOrder(orderId);
         ShiftsEntity shift = getShiftId(shiftId, driverId);
 
-        if (order.getStatus() == null || !order.getStatus().equals(Constants.ORDERED)) // TODO : add shift check
+        if (order.getStatus() == null || !order.getStatus().equals(Constants.ORDERED))
         {
             throw new NotAssignableStatusException();
         }
 
-        order.setShiftId(shift.getShiftId());
         order.setStatus(Constants.INPROGRESS);
         session.save(order);
 
@@ -64,12 +63,12 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void endOrderTravel(int orderId, int shiftId, int driverId) throws NonExistingOrderException, NonExistingShiftException, NotInProgressStatusException {
+    public String endOrderTravel(int orderId, int shiftId, int driverId) throws NonExistingOrderException, NonExistingShiftException, NotInProgressStatusException {
         openSession();
         OrdersEntity order = getOrderByShiftId(orderId, shiftId);
         getShiftId(shiftId, driverId);
 
-        if (order.getStatus() == null || !order.getStatus().equals(Constants.INPROGRESS)) // TODO : add shift check
+        if (order.getStatus() == null || !order.getStatus().equals(Constants.INPROGRESS))
         {
             throw new NotInProgressStatusException();
         }
@@ -78,6 +77,9 @@ public class OrderService implements IOrderService {
         session.save(order);
 
         closeSession();
+
+        return "{\"clientId\": "+ order.getClientId() +",\n" +
+                "\"orderId\": "+ order.getOrderId() + "}";
     }
 
     @Override

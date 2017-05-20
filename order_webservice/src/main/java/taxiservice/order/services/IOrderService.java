@@ -16,7 +16,7 @@ public interface IOrderService {
 
     void assignOrder(int orderId, int shiftId, int driverId) throws NonExistingOrderException, NonExistingShiftException, NotAssignableStatusException;
 
-    void endOrderTravel(int orderId, int shiftId, int driverId) throws NonExistingOrderException, NonExistingShiftException, NotInProgressStatusException;
+    String endOrderTravel(int orderId, int shiftId, int driverId) throws NonExistingOrderException, NonExistingShiftException, NotInProgressStatusException;
 
     OrdersEntity getOrderDetails(int orderId, int clientId) throws NonExistingOrderException;
 

@@ -1,8 +1,16 @@
 package taxiservice.order.model;
 
-import org.hibernate.criterion.Restrictions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.mule.api.MuleContext;
+import org.mule.api.config.ConfigurationBuilder;
+import org.mule.api.context.MuleContextBuilder;
+import org.mule.api.context.MuleContextFactory;
+import org.mule.config.builders.DefaultsConfigurationBuilder;
+import org.mule.config.spring.SpringXmlConfigurationBuilder;
+import org.mule.context.DefaultMuleContextBuilder;
+import org.mule.context.DefaultMuleContextFactory;
+import org.mule.module.client.MuleClient;
 import taxiservice.order.dto.CancelOrderDto;
 import taxiservice.order.dto.EndTravelDto;
 import taxiservice.order.dto.Order;
@@ -35,6 +43,7 @@ public class OrderManager {
             return Response.status(201).entity(response).build();
         }
         catch (Exception e) {
+            e.printStackTrace();
             return Response.status(500).build();
         }
     }
@@ -90,7 +99,12 @@ public class OrderManager {
 
         try {
             IOrderService service = new OrderService();
-            service.endOrderTravel(endTravelDto.getOrderId(), endTravelDto.getShiftId(), endTravelDto.getDriverId());
+            String paymentDetails = service.endOrderTravel(endTravelDto.getOrderId(), endTravelDto.getShiftId(), endTravelDto.getDriverId());
+
+            MuleClient client = new MuleClient(true);
+            // client.request()
+            client.dispatch("http://localhost:8081", paymentDetails,null);
+
             return Response.status(202).entity("Successfully ended").build();
         } catch (NonExistingOrderException e) {
             return CreateBadRequestWithMsgResponse(e.getMessage());
