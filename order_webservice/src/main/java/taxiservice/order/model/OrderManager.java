@@ -18,6 +18,10 @@ import java.util.Map;
  * Created by monikanowakowicz on 13/05/2017.
  */
 public class OrderManager {
+
+    private static final double PAYMENT_FACTOR = 5.0;
+
+
     public Response order(Order order) {
         int userId = order.getUserId();
 
@@ -42,14 +46,17 @@ public class OrderManager {
             properties.put("http.query.params", query);
 //            MuleMessage result = client.send
 //                    ("http://localhost:8081/localization/taxiservice/localization/getDistance?originAddress=" +order.getLocation_start()+ "&destinationAddress=" +order.getLocation_end(),null, properties);
+            String url = "http://localhost:8081/localization/taxiservice/localization/getDistance?originAddress="+order.getLocation_start()+"&destinationAddress="+order.getLocation_end();
             MuleMessage result = client.send
-                    ("http://localhost:8081/localization/taxiservice/localization/getDistance?originAddress=Wroclaw&destinationAddress=Krakow",null, properties);
+                    (url,null, properties);
 
 
             String payload = result.getPayloadForLogging();
             double route = Double.valueOf(payload.replace(" km",""));
 
             setRouteLength(new OrderRouteDto(orderId, route));
+
+            setOrderCost(orderId, route);
             String response = "{ orderId:\"" + orderId + "\" }";
 
             return Response.status(201).entity(response).build();
@@ -186,6 +193,28 @@ public class OrderManager {
 
     private Response CreateBadRequestWithMsgResponse(String message) {
         return Response.status(400).entity(message).build();
+    }
+
+    public Response setOrderCost(int orderId, double routeLength) {
+        if(routeLength == 0) {
+            String response = "{ valid: false, reason:\"route null value\" }";
+            return Response.status(400).entity(response).build();
+        }
+        double cost = routeLength * PAYMENT_FACTOR;
+        try {
+            IOrderService service = new OrderService();
+            String responsedCost = service.setOrderCost(orderId,cost);
+
+            JSONObject responseDetailsJson = new JSONObject();
+            responseDetailsJson.put("cost", responsedCost);
+
+
+            return Response.status(200).entity(responseDetailsJson.toString()).build();
+
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+
     }
 
     public Response setRouteLength(OrderRouteDto orderRouteDto) {

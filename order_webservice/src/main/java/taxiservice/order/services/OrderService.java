@@ -114,6 +114,18 @@ public class OrderService implements IOrderService {
                 "\"orderId\": "+ orderRouteDto.getOrderId() + "}";
     }
 
+    @Override
+    public String setOrderCost(int orderId, double routeCost) {
+        openSession();
+        Query orderQuery = session.createQuery("update OrdersEntity set cost = :cost" + " where orderId = :order_id");
+        orderQuery.setParameter("cost", routeCost);
+        orderQuery.setParameter("order_id", orderId);
+        orderQuery.executeUpdate();
+        closeSession();
+        return "{\"cost\": "+ routeCost +",\n" +
+                "\"orderId\": "+ orderId + "}";
+    }
+
     private List<OrdersEntity> getOrdersForDriver(int driverId) {
         Criteria criteria = session.createCriteria(OrdersEntity.class);
         criteria.add(Restrictions.eq("status", Constants.ORDERED));

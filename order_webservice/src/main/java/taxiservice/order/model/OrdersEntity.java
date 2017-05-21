@@ -1,7 +1,6 @@
 package taxiservice.order.model;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -17,7 +16,7 @@ public class OrdersEntity {
     private String locationEnd;
     private double routeLength;
     private String status;
-    private BigDecimal cost;
+    private double cost;
     private int clientId;
     private ShiftsEntity shiftId;
 
@@ -116,11 +115,11 @@ public class OrdersEntity {
 
     @Basic
     @Column(name = "cost")
-    public BigDecimal getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(BigDecimal cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 

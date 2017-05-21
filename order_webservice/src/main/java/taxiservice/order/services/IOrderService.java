@@ -25,4 +25,6 @@ public interface IOrderService {
     List<OrdersEntity> getOrders(int driverId);
 
     String setRouteLength(OrderRouteDto orderRouteDto);
+
+    String setOrderCost(int orderId, double routeCost);
 }
