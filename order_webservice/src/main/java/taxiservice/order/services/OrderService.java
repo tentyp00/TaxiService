@@ -60,6 +60,7 @@ public class OrderService implements IOrderService {
         }
 
         order.setStatus(Constants.INPROGRESS);
+        order.setShiftId(shift);
         session.save(order);
 
         closeSession();
@@ -67,6 +68,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public String endOrderTravel(int orderId, int shiftId, int driverId) throws NonExistingOrderException, NonExistingShiftException, NotInProgressStatusException {
+
         openSession();
         OrdersEntity order = getOrderByShiftId(orderId, shiftId);
         getShiftId(shiftId, driverId);
@@ -134,7 +136,8 @@ public class OrderService implements IOrderService {
 
     private OrdersEntity getOrderByShiftId(int orderId, int shiftId) throws NonExistingOrderException {
         Criteria criteria = session.createCriteria(OrdersEntity.class);
-        criteria.add(Restrictions.eq("shiftId", shiftId));
+        //TODO: po co tutaj getByShiftID skoro mamy juz orderId?
+        //criteria.add(Restrictions.eq("shiftId", shiftId));
         criteria.add(Restrictions.eq("orderId", orderId));
         List<OrdersEntity> result = criteria.list();
 
@@ -150,6 +153,7 @@ public class OrderService implements IOrderService {
         criteria.add(Restrictions.eq("driverId", driverId));
         criteria.add(Restrictions.eq("shiftId", shiftId));
         List<ShiftsEntity> result = criteria.list();
+
 
         if (result.isEmpty()) {
             throw new NonExistingShiftException(shiftId, driverId);
@@ -173,9 +177,13 @@ public class OrderService implements IOrderService {
 
 
     private OrdersEntity getOrder(int orderId) throws NonExistingOrderException {
-        Criteria criteria = session.createCriteria(OrdersEntity.class);
-        criteria.add(Restrictions.eq("orderId", orderId));
-        List<OrdersEntity> result = criteria.list();
+//        Criteria criteria = session.createCriteria(OrdersEntity.class);
+//        criteria.add(Restrictions.eq("orderId", orderId));
+//        List<OrdersEntity> result = criteria.list();
+
+        String hql = "FROM OrdersEntity WHERE orderId =" + orderId;
+        Query query = session.createQuery(hql);
+        List<OrdersEntity> result = query.list();
 
         if (result.isEmpty()) {
             throw new NonExistingOrderException(orderId);

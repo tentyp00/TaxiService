@@ -104,6 +104,7 @@ public class OrderManager {
         } catch (NotAssignableStatusException e) {
             return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(500).build();
         }
     }
@@ -121,8 +122,8 @@ public class OrderManager {
             String paymentDetails = service.endOrderTravel(endTravelDto.getOrderId(), endTravelDto.getShiftId(), endTravelDto.getDriverId());
 
             MuleClient client = new MuleClient(true);
-            // client.request()
-            client.dispatch("http://localhost:8081", paymentDetails,null);
+
+            client.dispatch("http://localhost:8081/payment/taxiservice/payment/pay", paymentDetails, null);
 
             return Response.status(202).entity("Successfully ended").build();
         } catch (NonExistingOrderException e) {
@@ -132,6 +133,7 @@ public class OrderManager {
         } catch (NotInProgressStatusException e) {
             return CreateBadRequestWithMsgResponse(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(500).build();
         }
     }
@@ -187,6 +189,7 @@ public class OrderManager {
 
             return Response.status(200).entity(responseObj.toString()).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(500).build();
         }
     }
