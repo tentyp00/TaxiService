@@ -2,25 +2,17 @@ package taxiservice.order.model;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.mule.api.MuleContext;
-import org.mule.api.config.ConfigurationBuilder;
-import org.mule.api.context.MuleContextBuilder;
-import org.mule.api.context.MuleContextFactory;
-import org.mule.config.builders.DefaultsConfigurationBuilder;
-import org.mule.config.spring.SpringXmlConfigurationBuilder;
-import org.mule.context.DefaultMuleContextBuilder;
-import org.mule.context.DefaultMuleContextFactory;
+import org.mule.api.MuleMessage;
 import org.mule.module.client.MuleClient;
-import taxiservice.order.dto.CancelOrderDto;
-import taxiservice.order.dto.EndTravelDto;
-import taxiservice.order.dto.Order;
-import taxiservice.order.dto.OrderAssignmentDto;
+import taxiservice.order.dto.*;
 import taxiservice.order.exceptions.*;
 import taxiservice.order.services.IOrderService;
 import taxiservice.order.services.OrderService;
 
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by monikanowakowicz on 13/05/2017.
@@ -37,7 +29,27 @@ public class OrderManager {
         try
         {
             IOrderService service = new OrderService();
-            int orderId = service.createOrder(userId);
+            int orderId = service.createOrder(order);
+
+            MuleClient client = new MuleClient(true);
+            Map<String, Object> properties = new HashMap<String, Object>();
+            Map<String, String> query = new HashMap<>();
+            query.put("originAddress", order.getLocation_start());
+            query.put("destinationAddress", order.getLocation_end());
+            properties.put("Content-Type", "application/json");
+            properties.put("http.method", "POST");
+            properties.put("http.request.path", "/localization/taxiservice/localization/getDistance");
+            properties.put("http.query.params", query);
+//            MuleMessage result = client.send
+//                    ("http://localhost:8081/localization/taxiservice/localization/getDistance?originAddress=" +order.getLocation_start()+ "&destinationAddress=" +order.getLocation_end(),null, properties);
+            MuleMessage result = client.send
+                    ("http://localhost:8081/localization/taxiservice/localization/getDistance?originAddress=Wroclaw&destinationAddress=Krakow",null, properties);
+
+
+            String payload = result.getPayloadForLogging();
+            double route = Double.valueOf(payload.replace(" km",""));
+
+            setRouteLength(new OrderRouteDto(orderId, route));
             String response = "{ orderId:\"" + orderId + "\" }";
 
             return Response.status(201).entity(response).build();
@@ -174,5 +186,28 @@ public class OrderManager {
 
     private Response CreateBadRequestWithMsgResponse(String message) {
         return Response.status(400).entity(message).build();
+    }
+
+    public Response setRouteLength(OrderRouteDto orderRouteDto) {
+        if (orderRouteDto == null) {
+            String response = "{ valid: false, reason:\"route null value\" }";
+            return Response.status(400).entity(response).build();
+        }
+
+        try {
+            IOrderService service = new OrderService();
+            String route = service.setRouteLength(orderRouteDto);
+
+            JSONObject responseDetailsJson = new JSONObject();
+            responseDetailsJson.put("route", route);
+
+
+            return Response.status(200).entity(responseDetailsJson.toString()).build();
+
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+
+
     }
 }

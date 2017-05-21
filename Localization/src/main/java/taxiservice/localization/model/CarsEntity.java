@@ -31,11 +31,11 @@ public class CarsEntity {
 
     
     @Column(name = "car_model_id")
-    public Integer getCarModelId() {
+    public CarModelsEntity getCarModelId() {
         return carModelId;
     }
 
-    public void setCarModelId(Integer carModelId) {
+    public void setCarModelId(CarModelsEntity carModelId) {
         this.carModelId = carModelId;
     }
 

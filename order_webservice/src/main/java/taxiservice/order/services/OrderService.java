@@ -1,12 +1,13 @@
 package taxiservice.order.services;
 
 
-import jdk.net.SocketFlow;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import taxiservice.order.dto.CancelOrderDto;
+import taxiservice.order.dto.Order;
+import taxiservice.order.dto.OrderRouteDto;
 import taxiservice.order.exceptions.*;
 import taxiservice.order.model.OrdersEntity;
 import taxiservice.order.model.ShiftsEntity;
@@ -21,11 +22,13 @@ import java.util.List;
 public class OrderService implements IOrderService {
     Session session;
 
-    public int createOrder(int userID) {
+    public int createOrder(Order order) {
         openSession();
         OrdersEntity entity = new OrdersEntity();
-        entity.setShiftId(1); // TODO: set as non mandatory
-        entity.setClientId(userID);
+        //entity.setShiftId(1); // TODO: set as non mandatory
+        entity.setClientId(order.getUserId());
+        entity.setLocationStart(order.getLocation_start());
+        entity.setLocationEnd(order.getLocation_end());
         entity.setStatus(Constants.ORDERED);
         session.save(entity);
         closeSession();
@@ -96,6 +99,19 @@ public class OrderService implements IOrderService {
         List<OrdersEntity> orders = getOrdersForDriver(driverId);
         closeSession();
         return orders;
+    }
+
+    @Override
+    public String setRouteLength(OrderRouteDto orderRouteDto) {
+        openSession();
+        Query orderQuery = session.createQuery("update OrdersEntity set routeLength = :routeLength" + " where orderId = :order_id");
+        orderQuery.setParameter("routeLength", orderRouteDto.getRouteLength());
+        orderQuery.setParameter("order_id", orderRouteDto.getOrderId());
+        orderQuery.executeUpdate();
+        closeSession();
+
+        return "{\"route_length\": "+ orderRouteDto.getRouteLength() +",\n" +
+                "\"orderId\": "+ orderRouteDto.getOrderId() + "}";
     }
 
     private List<OrdersEntity> getOrdersForDriver(int driverId) {
