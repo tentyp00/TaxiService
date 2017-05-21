@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
+<mule xmlns:wmq="http://www.mulesoft.org/schema/mule/ee/wmq" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
 	xmlns:jbossts="http://www.mulesoft.org/schema/mule/jbossts" xmlns:file="http://www.mulesoft.org/schema/mule/file"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
@@ -12,32 +12,111 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
 http://www.mulesoft.org/schema/mule/jbossts http://www.mulesoft.org/schema/mule/jbossts/current/mule-jbossts.xsd
-http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/ee/wmq http://www.mulesoft.org/schema/mule/ee/wmq/current/mule-wmq-ee.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" doc:name="HTTP Listener Configuration"/>
     <jms:activemq-connector name="Active_MQ" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
     <jms:activemq-connector name="Active_MQ1" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
-    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration"/>
-    <flow name="EsbTaxiServiceFlow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/*" doc:name="HTTP"  parseRequest="false">
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8080" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration1" host="localhost" port="8080" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration2" host="localhost" port="8080" doc:name="HTTP Request Configuration"/>
+    <flow name="EsbTaxiServiceFlowOrder">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/order/*" doc:name="OrderHTTP"  parseRequest="false">
+            <http:response-builder disablePropertiesAsHeaders="true">
+                <http:header headerName="date" value="#[server.dateTime]"/>
+                <http:header headerName="expires" value="#[server.dateTime.plusHours(1)]"/>
+
+            </http:response-builder>
+        </http:listener>
+        <byte-array-to-object-transformer doc:name="Byte Array to Object"/>
+        <jms:object-to-jmsmessage-transformer doc:name="Object to JMSMessage"/>
+
+        <set-payload value="#[message.inboundProperties.'http.request.path']%%#[message.payload]%%#[message.inboundProperties.'http.query.params']" doc:name="Set Payload"/>
+        <jms:outbound-endpoint queue="esb" connector-ref="Active_MQ" doc:name="JMS"/>
+		<logger message="#[payload]" level="INFO" category="#[payload]" doc:name="Logger"/>
+    </flow>
+    <flow name="EsbTaxiServiceFlowPayment">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/payment/*" parseRequest="false" doc:name="PaymentHTTP">
             <http:response-builder disablePropertiesAsHeaders="true">
                 <http:header headerName="date" value="#[server.dateTime]"/>
                 <http:header headerName="expires" value="#[server.dateTime.plusHours(1)]"/>
             </http:response-builder>
         </http:listener>
         <byte-array-to-string-transformer doc:name="Byte Array to String"/>
-        <set-payload value="#[message.payload]" doc:name="Set Payload"/>
+        <set-payload value="#[message.inboundProperties.'http.request.path']%%#[message.payload]%%#[message.inboundProperties.'http.query.params']" doc:name="Set Payload"/>
         <jms:outbound-endpoint queue="esb" connector-ref="Active_MQ" doc:name="JMS"/>
-		<logger message="#[payload]" level="INFO" category="#[payload]" doc:name="Logger"/>
+        <logger message="#[payload]" level="INFO" category="#[payload]" doc:name="Logger"/>
+    </flow>
+    <flow name="EsbTaxiServiceFlowLocalization">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/localization/*" parseRequest="false" doc:name="LocalizationHTTP">
+            <http:response-builder disablePropertiesAsHeaders="true">
+                <http:header headerName="date" value="#[server.dateTime]"/>
+                <http:header headerName="expires" value="#[server.dateTime.plusHours(1)]"/>
+            </http:response-builder>
+        </http:listener>
+        <byte-array-to-string-transformer doc:name="Copy_of_Byte Array to String"/>
+        <set-payload value="#[message.inboundProperties.'http.request.path']%%#[message.payload]%%#[message.inboundProperties.'http.query.params'.originAddress]%%#[message.inboundProperties.'http.query.params'.destinationAddress]" doc:name="Copy_of_Set Payload"/>
+        <jms:outbound-endpoint queue="esb" connector-ref="Active_MQ" doc:name="Copy_of_JMS"/>
+        <response>
+            <byte-array-to-object-transformer doc:name="Byte Array to Object"/>
+        </response>
+        <flow-ref name="esbtaxiserviceFlow" doc:name="esbtaxiserviceFlow"/>
+
+    </flow>
+    <flow name="EsbTaxiServiceFlowLogin">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/login/*" parseRequest="false" doc:name="LoginHTTP">
+            <http:response-builder disablePropertiesAsHeaders="true">
+                <http:header headerName="date" value="#[server.dateTime]"/>
+                <http:header headerName="expires" value="#[server.dateTime.plusHours(1)]"/>
+            </http:response-builder>
+        </http:listener>
+        <byte-array-to-string-transformer doc:name="Copy_of_Byte Array to String"/>
+        <set-payload value="#[message.inboundProperties.'http.request.path']%%#[message.payload]%%#[message.inboundProperties.'http.query.params']" doc:name="Copy_of_Set Payload"/>
+        <jms:outbound-endpoint queue="esb" connector-ref="Active_MQ" doc:name="Copy_of_JMS"/>
+        <logger message="#[payload]" level="INFO" category="#[payload]" doc:name="Copy_of_Logger"/>
     </flow>
     <flow name="esbtaxiserviceFlow">
         <jms:inbound-endpoint queue="esb" connector-ref="Active_MQ1" doc:name="JMS"/>
         <byte-array-to-string-transformer doc:name="Byte Array to String"/>
         <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <http:request config-ref="HTTP_Request_Configuration" path="/taxiservice/payment/pay" method="POST" doc:name="HTTP">
-            <http:request-builder>
-                <http:header headerName="Content-Type" value="application/json"/>
-            </http:request-builder>
-        </http:request>
+         <set-variable variableName="url" value="#[payload.split('%%')[0]]" doc:name="url"/>
+        <set-variable variableName="payloads" value="#[payload.split('%%')[1]]" doc:name="payloads"/>
+
+        <choice doc:name="Choice">
+            <when expression="#[flowVars.url == '/login/taxiservice/register']">
+                <set-payload value="#[flowVars.payloads]" doc:name="Set Payload"/>
+                <http:request config-ref="HTTP_Request_Configuration" path="login/taxiservice/register" method="POST" doc:name="HTTP">
+                    <http:request-builder>
+                        <http:header headerName="Content-Type" value="application/json"/>
+
+                    </http:request-builder>
+                </http:request>
+            </when>
+            <when expression="#[flowVars.url == '/localization/taxiservice/localization/getDistance']">
+                <set-variable variableName="originAddress" value="#[payload.split('%%')[2]]" doc:name="originAddress"/>
+                <set-variable variableName="destinationAddress" value="#[payload.split('%%')[3]]" doc:name="destinationAddress"/>
+
+                <http:request config-ref="HTTP_Request_Configuration1" path="/localization/taxiservice/localization/getDistance" method="GET" doc:name="HTTP-GetDistance">
+                    <http:request-builder>
+                        <http:query-param paramName="originAddress" value="#[flowVars.originAddress]"/>
+                        <http:query-param paramName="destinationAddress" value="#[flowVars.destinationAddress]"/>
+
+                    </http:request-builder>
+                </http:request>
+                <byte-array-to-object-transformer doc:name="Byte Array to Object"/>
+                <json:object-to-json-transformer doc:name="Object to JSON"/>
+                <logger message="#[json:distance]" level="INFO" doc:name="Logger"/>
+                <set-payload value="#[json:distance]" doc:name="Set Payload"/>
+
+
+            </when>
+            <otherwise>
+                <logger message="Cos sie zjebalo" level="INFO" doc:name="Logger"/>
+            </otherwise>
+        </choice>
+
     </flow>
    
 </mule>
