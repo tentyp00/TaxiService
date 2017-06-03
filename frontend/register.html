@@ -1,0 +1,74 @@
+<div ng-controller="registerCtrl">
+    <div class="section"></div>
+    <main >
+        <center>
+            <div class="section"></div>
+
+            <h5 class="indigo-text">Register account</h5>
+            <div class="section"></div>
+
+            <div class="container">
+                <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+
+                    <form class="col s12" method="post">
+                        <div class='row'>
+                            <div class='col s12'>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate' type='text'  id='first_name' ng-model="first_name"/>
+                                <label for='first_name'>Enter your first name</label>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate' type='text'  id='last_name' ng-model="last_name"/>
+                                <label for='last_name'>Enter your last name</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate' type='email'  id='email' ng-model="email"/>
+                                <label for='first_name'>Enter your email</label>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate' type='text'  id='phone_number' ng-model="phone_number"/>
+                                <label for='first_name'>Enter your phone_number</label>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate' type='text'  id='login' ng-model="login"/>
+                                <label for='first_name'>Enter your login</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate' type='password'  id='password' ng-model="password"/>
+                                <label for='password'>Enter your password</label>
+                            </div>
+
+                        </div>
+
+                        <br />
+                        <center>
+                            <div class='row'>
+                                <button type='submit' name='btn_login' ng-click="rejestracja()" class='col s12 btn btn-large waves-effect indigo'>Register</button>
+                            </div>
+                        </center>
+                    </form>
+                </div>
+            </div>
+
+        </center>
+
+        <div class="section"></div>
+        <div class="section"></div>
+    </main>
+</div>
