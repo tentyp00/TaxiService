@@ -37,7 +37,7 @@ public class Login {
             passOk = Password.checkPassword(pass, user.getPassword());
 
             if (!passOk) {
-                String response = "{ valid: false, reason:\"password\" }";
+                String response = "{ \"valid\": false, \"reason\":\"password\" }";
                 return Response.status(500).entity(response).build();
             }
 
@@ -52,7 +52,7 @@ public class Login {
         createUserJSON(jsonUser, user);
         loginService.addLoginHistory(user.getId());
 
-        String response = "{ valid: true, systemUser:\"" + jsonUser.toJSONString() + "\" }";
+        String response = "{ \"valid\": true, \"systemUser\":" + jsonUser.toJSONString() + "\" }";
         return Response.status(200).entity(response).build();
     }
 
