@@ -52,7 +52,7 @@ public class Login {
         createUserJSON(jsonUser, user);
         loginService.addLoginHistory(user.getId());
 
-        String response = "{ \"valid\": true, \"systemUser\":" + jsonUser.toJSONString() + "\" }";
+        String response = "{ \"valid\": true, \"systemUser\":" + jsonUser.toJSONString() + " }";
         return Response.status(200).entity(response).build();
     }
 
@@ -63,7 +63,7 @@ public class Login {
         jsonUser.put("email", user.getEmail());
         jsonUser.put("login", user.getLogin());
         jsonUser.put("password", user.getPassword());
-        jsonUser.put("join_date", user.getJoinDate());
+        jsonUser.put("join_date", user.getJoinDate().toString());
         jsonUser.put("phone_number", user.getPhoneNumber());
     }
 
