@@ -1,12 +1,10 @@
 package taxiservice.payments.services;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.hibernate.Query;
+import org.hibernate.Session;
 import taxiservice.payments.dto.ChargeAmount;
 import taxiservice.payments.dto.Payment;
 import taxiservice.payments.exceptions.NonExistingClientException;
@@ -153,7 +151,7 @@ public class PaymentService {
 	public void addPaymentHistory(long walletId, double amount, String currency, String payment_type) {
 		Date data = new Date();
 		Query query = session
-				.createSQLQuery("INSERT INTO Payments_History (wallet_Id, payment_time,amount,currency,payment_type) "
+				.createSQLQuery("INSERT INTO taxiservice.Payments_History (wallet_Id, payment_time,amount,currency,payment_type) "
 						+ "VALUES ( :wallet_Id, :payment_time,:amount,:currency,:payment_type)");
 		query.setParameter("wallet_Id", walletId);
 		query.setParameter("payment_time", new Timestamp(data.getTime()));

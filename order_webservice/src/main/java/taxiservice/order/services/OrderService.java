@@ -1,12 +1,13 @@
 package taxiservice.order.services;
 
 
-import jdk.net.SocketFlow;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import taxiservice.order.dto.CancelOrderDto;
+import taxiservice.order.dto.Order;
+import taxiservice.order.dto.OrderRouteDto;
 import taxiservice.order.exceptions.*;
 import taxiservice.order.model.OrdersEntity;
 import taxiservice.order.model.ShiftsEntity;
@@ -21,11 +22,13 @@ import java.util.List;
 public class OrderService implements IOrderService {
     Session session;
 
-    public int createOrder(int userID) {
+    public int createOrder(Order order) {
         openSession();
         OrdersEntity entity = new OrdersEntity();
-        entity.setShiftId(1); // TODO: set as non mandatory
-        entity.setClientId(userID);
+        //entity.setShiftId(1); // TODO: set as non mandatory
+        entity.setClientId(order.getUserId());
+        entity.setLocationStart(order.getLocation_start());
+        entity.setLocationEnd(order.getLocation_end());
         entity.setStatus(Constants.ORDERED);
         session.save(entity);
         closeSession();
@@ -57,6 +60,7 @@ public class OrderService implements IOrderService {
         }
 
         order.setStatus(Constants.INPROGRESS);
+        order.setShiftId(shift);
         session.save(order);
 
         closeSession();
@@ -64,6 +68,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public String endOrderTravel(int orderId, int shiftId, int driverId) throws NonExistingOrderException, NonExistingShiftException, NotInProgressStatusException {
+
         openSession();
         OrdersEntity order = getOrderByShiftId(orderId, shiftId);
         getShiftId(shiftId, driverId);
@@ -98,6 +103,31 @@ public class OrderService implements IOrderService {
         return orders;
     }
 
+    @Override
+    public String setRouteLength(OrderRouteDto orderRouteDto) {
+        openSession();
+        Query orderQuery = session.createQuery("update OrdersEntity set routeLength = :routeLength" + " where orderId = :order_id");
+        orderQuery.setParameter("routeLength", orderRouteDto.getRouteLength());
+        orderQuery.setParameter("order_id", orderRouteDto.getOrderId());
+        orderQuery.executeUpdate();
+        closeSession();
+
+        return "{\"route_length\": "+ orderRouteDto.getRouteLength() +",\n" +
+                "\"orderId\": "+ orderRouteDto.getOrderId() + "}";
+    }
+
+    @Override
+    public String setOrderCost(int orderId, double routeCost) {
+        openSession();
+        Query orderQuery = session.createQuery("update OrdersEntity set cost = :cost" + " where orderId = :order_id");
+        orderQuery.setParameter("cost", routeCost);
+        orderQuery.setParameter("order_id", orderId);
+        orderQuery.executeUpdate();
+        closeSession();
+        return "{\"cost\": "+ routeCost +",\n" +
+                "\"orderId\": "+ orderId + "}";
+    }
+
     private List<OrdersEntity> getOrdersForDriver(int driverId) {
         Criteria criteria = session.createCriteria(OrdersEntity.class);
         criteria.add(Restrictions.eq("status", Constants.ORDERED));
@@ -106,7 +136,8 @@ public class OrderService implements IOrderService {
 
     private OrdersEntity getOrderByShiftId(int orderId, int shiftId) throws NonExistingOrderException {
         Criteria criteria = session.createCriteria(OrdersEntity.class);
-        criteria.add(Restrictions.eq("shiftId", shiftId));
+        //TODO: po co tutaj getByShiftID skoro mamy juz orderId?
+        //criteria.add(Restrictions.eq("shiftId", shiftId));
         criteria.add(Restrictions.eq("orderId", orderId));
         List<OrdersEntity> result = criteria.list();
 
@@ -122,6 +153,7 @@ public class OrderService implements IOrderService {
         criteria.add(Restrictions.eq("driverId", driverId));
         criteria.add(Restrictions.eq("shiftId", shiftId));
         List<ShiftsEntity> result = criteria.list();
+
 
         if (result.isEmpty()) {
             throw new NonExistingShiftException(shiftId, driverId);
@@ -145,9 +177,13 @@ public class OrderService implements IOrderService {
 
 
     private OrdersEntity getOrder(int orderId) throws NonExistingOrderException {
-        Criteria criteria = session.createCriteria(OrdersEntity.class);
-        criteria.add(Restrictions.eq("orderId", orderId));
-        List<OrdersEntity> result = criteria.list();
+//        Criteria criteria = session.createCriteria(OrdersEntity.class);
+//        criteria.add(Restrictions.eq("orderId", orderId));
+//        List<OrdersEntity> result = criteria.list();
+
+        String hql = "FROM OrdersEntity WHERE orderId =" + orderId;
+        Query query = session.createQuery(hql);
+        List<OrdersEntity> result = query.list();
 
         if (result.isEmpty()) {
             throw new NonExistingOrderException(orderId);

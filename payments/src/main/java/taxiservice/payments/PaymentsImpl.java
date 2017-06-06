@@ -1,25 +1,9 @@
 package taxiservice.payments;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import taxiservice.payments.dto.ChargeAmount;
 import taxiservice.payments.dto.Payment;
 import taxiservice.payments.exceptions.NonExistingClientException;
@@ -28,6 +12,14 @@ import taxiservice.payments.exceptions.WalletAmountTooLowException;
 import taxiservice.payments.models.PaymentsHistory;
 import taxiservice.payments.services.PaymentService;
 import taxiservice.payments.utils.Constants;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 @Path("/payment")
 public class PaymentsImpl implements IPayments {
@@ -88,6 +80,7 @@ public class PaymentsImpl implements IPayments {
 			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		}catch (Exception e) {
 			responseDetailsJson.put(Constants.ERROR, e.getClass().getCanonicalName());
+			e.printStackTrace();
 			return Response.status(400).entity(responseDetailsJson.toString()).build();
 		}
 		return Response.status(200).entity(response).build();

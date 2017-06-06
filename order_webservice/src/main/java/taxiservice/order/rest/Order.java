@@ -3,6 +3,7 @@ package taxiservice.order.rest;
 import taxiservice.order.dto.CancelOrderDto;
 import taxiservice.order.dto.EndTravelDto;
 import taxiservice.order.dto.OrderAssignmentDto;
+import taxiservice.order.dto.OrderRouteDto;
 import taxiservice.order.model.OrderManager;
 
 import javax.ws.rs.*;
@@ -50,6 +51,13 @@ public class Order {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response assignToOrder(OrderAssignmentDto assignmentDto) {
         return getManager().assignToOrder(assignmentDto);
+    }
+
+    @POST
+    @Path("/assignRouteLength")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response assignRouteLength(OrderRouteDto orderRouteDto) {
+        return getManager().setRouteLength(orderRouteDto);
     }
 
     @POST

@@ -8,6 +8,9 @@ public class OrderAssignmentDto {
     private int shiftId;
     private int driverId;
 
+    public OrderAssignmentDto() {
+    }
+
     public int getOrderId() {
         return orderId;
     }

@@ -36,17 +36,17 @@
 <div ng-controller="myCtrl">
     <div id="floating-panel">
     <b>Start: </b>
-    <input id="start" ng-model="start"/>
+    <input class='input-field col s12' id="start" ng-model="start"/>
 
     <b>End: </b>
     <input id="end" ng-model="end"/>
-<button id="test" type="button" ng-click="szukaj()">Sprawdź</button>
- <b ng-show="resultTime[0]=='OK'">Czas: </b>
+<b ng-show="resultTime[0]=='OK'">Czas: </b>
 <input id="rTime" ng-show="resultTime[0]=='OK'" ng-model="resultTime[3]"/>
  <b ng-show="resultTime[0]=='OK'">Dystans: </b>
 <input id="rDistance" ng-show="resultDistance[0]=='OK'" ng-model="resultDistance[3]"/>
  <b ng-show="resultTime[0]=='OK'">Koszt: </b>
 <input id="cost" ng-show="resultTime[0]=='OK'" ng-model="cost"/>
+        <button id="test" type="button"  ng-click="szukaj()">Sprawdź</button>
     </div>
     <div id="map"></div>
     <script>
@@ -86,7 +86,7 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
 <script src="js/angular-cookies.min.js"></script>
 <script src="js/app.js"></script>
   </body>
