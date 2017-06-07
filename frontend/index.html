@@ -1,93 +1,138 @@
 <!DOCTYPE html>
 <html ng-app="lokalizator">
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Directions service</title>
-    <style>
-      /* Always set the map height explicitly to define the size of the div
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Serwis taxi</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
-        height: 400px;
-        width: 400px;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-      }
-    </style>
-  </head>
-  <body>
-<div ng-controller="myCtrl">
-    <div id="floating-panel">
-    <b>Start: </b>
-    <input class='input-field col s12' id="start" ng-model="start"/>
 
-    <b>End: </b>
-    <input id="end" ng-model="end"/>
-<b ng-show="resultTime[0]=='OK'">Czas: </b>
-<input id="rTime" ng-show="resultTime[0]=='OK'" ng-model="resultTime[3]"/>
- <b ng-show="resultTime[0]=='OK'">Dystans: </b>
-<input id="rDistance" ng-show="resultDistance[0]=='OK'" ng-model="resultDistance[3]"/>
- <b ng-show="resultTime[0]=='OK'">Koszt: </b>
-<input id="cost" ng-show="resultTime[0]=='OK'" ng-model="cost"/>
-        <button id="test" type="button"  ng-click="szukaj()">Sprawdź</button>
+
+    .background-blue {
+      background-color: #24478f;
+      color: white;
+    }
+
+    body, html {
+      background-color: #98b2e6;
+ height: 100%;
+    }
+
+    .height-full-perc {
+      height: 100%;
+    }
+
+    .height-full {
+          -webkit-box-sizing: padding-box;
+    -moz-box-sizing: padding-box;
+    box-sizing: padding-box;
+    height: 100vh;
+    padding : 0px 10px 10px 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <container>
+    <div class="navbar navbar-default navbar-static-top background-blue">
+      </br>
+      <div class="row" style="max-width: 400px;">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-2">
+          <i class="fa fa-car fa-3x"></i>
+        </div>
+        <div class="col-xs-8">
+          <h1>Serwis taxi</h1>
+        </div>
+        <div class="col-xs-1"></div>
+      </div>
     </div>
-    <div id="map"></div>
-    <script>
-      function initMap() {
-        var directionsService = new google.maps.DirectionsService;
-        var directionsDisplay = new google.maps.DirectionsRenderer;
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 7,
-          center: {lat: 41.85, lng: -87.65}
-        });
-        directionsDisplay.setMap(map);
 
-        var onChangeHandler = function() {
-          calculateAndDisplayRoute(directionsService, directionsDisplay);
-        };
-        document.getElementById('test').addEventListener('click', onChangeHandler);
-     
-      }
+    <div ng-controller="myCtrl">
 
-      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-        directionsService.route({
-          origin: document.getElementById('start').value,
-          destination: document.getElementById('end').value,
-          travelMode: 'DRIVING'
-        }, function(response, status) {
-          if (status === 'OK') {
-            directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
+      <div class="panel panel-default" style="margin: 10px;">
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="start">Start</label>
+            <input class="form-control" id="start" ng-model="start" />
+
+            <label for="end">End</label>
+            <input class="form-control" id="end" ng-model="end" />
+
+            <label for="rTime" ng-show="resultTime[0]=='OK'">Czas</label>
+            <input class="form-control" id="rTime" ng-show="resultTime[0]=='OK'" ng-model="resultTime[3]" />
+
+            <label for="rDistance" ng-show="resultTime[0]=='OK'">Dystans</label>
+            <input class="form-control" id="rDistance" ng-show="resultDistance[0]=='OK'" ng-model="resultDistance[3]" />
+
+            <label for="cost" ng-show="resultTime[0]=='OK'">Koszt</label>
+            <input class="form-control" id="cost" ng-show="resultTime[0]=='OK'" ng-model="cost" />
+
+            </br>
+            <button id="test" class="btn btn-default" ng-click="szukaj()"> Sprawdź cenę </button>
+          </div>
+        </div>
+      </div>
+
+<div class="height-full"> 
+      <div class="panel panel-default height-full-perc">
+        <div id="map" class="height-full-perc"></div>
+        <script>
+          function initMap() {
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = new google.maps.DirectionsRenderer;
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 7,
+              center: {
+                lat: 41.85,
+                lng: -87.65
+              }
+            });
+            directionsDisplay.setMap(map);
+
+            var onChangeHandler = function () {
+              calculateAndDisplayRoute(directionsService, directionsDisplay);
+            };
+            document.getElementById('test').addEventListener('click', onChangeHandler);
+
           }
-        });
-      }
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEf38nIhmYsVHIZlq2FNxECS88StQYSEo&callback=initMap">
-    </script>
+
+          function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+            directionsService.route({
+              origin: document.getElementById('start').value,
+              destination: document.getElementById('end').value,
+              travelMode: 'DRIVING'
+            }, function (response, status) {
+              if (status === 'OK') {
+                directionsDisplay.setDirections(response);
+              } else {
+                window.alert('Directions request failed due to ' + status);
+              }
+            });
+          }
+        </script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEf38nIhmYsVHIZlq2FNxECS88StQYSEo&callback=initMap">
+        </script>
+      </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
-<script src="js/angular-cookies.min.js"></script>
-<script src="js/app.js"></script>
-  </body>
+    
+    </div>
+    </div>
+  </container>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
+  <script src="js/angular-cookies.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
 </html>
