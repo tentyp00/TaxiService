@@ -19,6 +19,24 @@ html,body,.container {
     height:100%;
 }
 
-.background-blue {
-  background-color: lightskyblue
-}
+    .background-blue {
+      background-color: #24478f;
+      color: white;
+    }
+
+    body, html {
+      background-color: #98b2e6;
+ height: 100%;
+    }
+
+    .height-full-perc {
+      height: 100%;
+    }
+
+    .height-full {
+          -webkit-box-sizing: padding-box;
+    -moz-box-sizing: padding-box;
+    box-sizing: padding-box;
+    height: 100vh;
+    padding : 0px 10px 10px 10px;
+    }
